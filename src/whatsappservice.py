@@ -2,8 +2,8 @@ import os
 import requests
 
 GRAPH_VERSION = "v22.0"
-GRAPH_TOKEN = os.getenv("WHATSAPP_GRAPH_TOKEN", "")          
-PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")  
+GRAPH_TOKEN = os.getenv("WHATSAPP_GRAPH_TOKEN", "")
+PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "") 
 API_TIMEOUT = 15
 
 def SendMessageWhatsaap(data):
@@ -12,7 +12,7 @@ def SendMessageWhatsaap(data):
             print("[whatsapp] Falta token o phone_number_id")
             return False
 
-        api_url = f"https://graph.facebook.com/%7BGRAPH_VERSION%7D/%7BPHONE_NUMBER_ID%7D/messages"
+        api_url = f"https://graph.facebook.com/{GRAPH_VERSION}/{PHONE_NUMBER_ID}/messages"
         headers = {
             "Authorization": f"Bearer {GRAPH_TOKEN}",
             "Content-Type": "application/json",
