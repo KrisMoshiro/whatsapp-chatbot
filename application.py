@@ -12,15 +12,20 @@ def index():
 
 # Webhook verification: devuelve el challenge sin validar token (según tu pedido)
 @application.route('/whatsapp', methods=['GET'])
-def echo_challenge():
+def VeirfyToken():
+
     try:
-        challenge = request.args.get('hub.challenge')
-        if challenge:
-            return challenge, 200
-        return "", 400
-    except Exception as e:
-        print(f"[echo_challenge] error: {e}")
-        return "", 400
+        access_token = os.getenv("WHATSAPP_VERIFY_TOKEN", "")
+        token = request.args.get("hub.verify_token")
+        challenge = request.args.get("hub.challenge")
+
+        if token != None and challenge != None and token == access_token:
+            return challenge
+        else:
+            return "",400
+    except:
+        return "",400
+
 
 # Mensajes entrantes (Meta envía POST a /whatsapp con el JSON que muestras)
 @application.route('/whatsapp', methods=['POST'])
