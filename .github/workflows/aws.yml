@@ -57,7 +57,7 @@ jobs:
           APP_NAME: ${{ secrets.EB_APP_NAME }}
           ENV_NAME: ${{ secrets.EB_ENV_NAME }}
           REGION: us-east-2
-          BUCKET: elasticbeanstalk-us-east-2-257247531621
+          BUCKET: elasticbeanstalk-us-east-2-461942015119
           # Label Ãºnico (id + intento + sha corto)
           VERSION: v-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}
           FILE: deploy.zip
