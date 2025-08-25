@@ -19,8 +19,8 @@ def VeirfyToken():
         token = request.args.get("hub.verify_token")
         challenge = request.args.get("hub.challenge")
 
-        if token != None and challenge != None and token == access_token:
-            return challenge
+        if token and challenge and token == access_token:
+            return str(challenge), 200
         else:
             return "",400
     except:
