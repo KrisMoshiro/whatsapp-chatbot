@@ -1,10 +1,17 @@
-import os
+# src/whatsapp_api_service.py
 import requests
+from src.secrets_gcp import _fetch_secret_raw
 
 GRAPH_VERSION = "v22.0"
-GRAPH_TOKEN = os.getenv("WHATSAPP_GRAPH_TOKEN", "")
-PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "") 
 API_TIMEOUT = 15
+
+# Leer secretos una sola vez al iniciar el servicio
+GRAPH_TOKEN = _fetch_secret_raw(
+    "projects/592174418442/secrets/whatsapp_graph_token_moshiro/versions/latest"
+)
+PHONE_NUMBER_ID = _fetch_secret_raw(
+    "projects/592174418442/secrets/whatsapp_phone_number_id_moshiro/versions/latest"
+)
 
 def SendMessageWhatsaap(data):
     try:

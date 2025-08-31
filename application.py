@@ -1,31 +1,34 @@
 import os
 from flask import Flask, request
-import src.util as utils
-import src.whatsappservice as whatsap_api_service
+import src.utils as utils
+import src.whatsaap_api_service as whatsap_api_service  # OJO: ideal renombrar a whatsapp_api_service.py
+from src.secrets_gcp import _fetch_secret_raw  # usa tu utilitario
 
 # EB busca un objeto WSGI llamado "application"
 application = Flask(__name__)
+
+# Lee el secreto una sola vez al cargar el módulo
+VERIFY_TOKEN = _fetch_secret_raw(
+    "projects/592174418442/secrets/WHATSAPP_VERIFY_TOKEN_SECRET_PATH_MOSHIRO/versions/latest"
+)
 
 @application.route('/welcome', methods=['GET'])
 def index():
     return "Welcome to the Flask App!"
 
-# Webhook verification: devuelve el challenge sin validar token (según tu pedido)
 @application.route('/whatsapp', methods=['GET'])
 def VeirfyToken():
-
     try:
-        access_token = os.getenv("WHATSAPP_VERIFY_TOKEN", "")
         token = request.args.get("hub.verify_token")
         challenge = request.args.get("hub.challenge")
 
-        if token and challenge and token == access_token:
-            return str(challenge), 200
+        if token is not None and challenge is not None and token == VERIFY_TOKEN:
+            return challenge
         else:
-            return "",400
-    except:
-        return "",400
-
+            return "", 400
+    except Exception as e:
+        print(f"[verify] error leyendo token: {e}")
+        return "", 400
 
 # Mensajes entrantes (Meta envía POST a /whatsapp con el JSON que muestras)
 @application.route('/whatsapp', methods=['POST'])
@@ -42,7 +45,7 @@ def received_message():
             return "EVENT_RECEIVED", 200
 
         message = messages[0]
-        number = message.get('from', '')  # <-- este es el 'to' al que responderás
+        number = message.get('from', '')
         text = utils.GetTextUser(message)
 
         generate_message(text, number)
@@ -57,7 +60,7 @@ def generate_message(text, number):
     text_lower = (text or "").lower()
 
     if "text" in text_lower:
-        data = utils.TextMessage(text, number)  # corregido: usa variables, no literales
+        data = utils.TextMessage(text, number)
     elif "format" in text_lower:
         data = utils.TextFormatMessage(number)
     elif "image" in text_lower:
@@ -79,6 +82,5 @@ def generate_message(text, number):
 
     whatsap_api_service.SendMessageWhatsaap(data)
 
-if __name__ == '__main__':
-    # Local o EB
+if __name__ == "__main__":
     application.run(host="0.0.0.0", port=5000, debug=True)

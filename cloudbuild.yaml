@@ -1,0 +1,43 @@
+# Construye la imagen, la sube a Artifact Registry y despliega a Cloud Run
+
+substitutions:
+  _AR_HOSTNAME: us-central1-docker.pkg.dev
+  _AR_PROJECT_ID: sincere-octane-469302-n8
+  _AR_REPOSITORY: cloud-run-source-deploy
+  _DEPLOY_REGION: us-central1
+  _PLATFORM: managed
+  _SERVICE_NAME: chatbot-whatsaap-api
+  _TRIGGER_ID: e8ff5355-8bbd-44f3-802d-f250c054b40f
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # 1) Build de la imagen Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
+      - '.'
+
+  # 2) Push a Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
+
+  # 3) Deploy a Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - '${_SERVICE_NAME}'
+      - '--image=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
+      - '--region=${_DEPLOY_REGION}'
+      - '--platform=${_PLATFORM}'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+images:
+  - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
