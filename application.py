@@ -76,10 +76,18 @@ def ProcessMessages(text,number):
         listData.append(data)
         listData.append(dataLocation)
 
-    elif "contact" in text:
+    elif "contacto" in text:
         data = utils.TextMessage("*Contact Center:* /n 999999", number)
         listData.append(data)
-        
+
+    elif "comprar" in text:
+        data = utils.ButtonMessage(number)
+        listData.append(data)
+    
+    elif "vender" in text:
+        data = utils.ButtonMessage(number)
+        listData.append(data)
+
     else:
         data =  utils.TextMessage("habla chileno qlo, no soy na venezolano", number)
 
