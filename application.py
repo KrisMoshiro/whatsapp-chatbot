@@ -48,13 +48,25 @@ def received_message():
         number = message.get('from', '')
         text = utils.GetTextUser(message)
 
-        generate_message(text, number)
+        ProcessMessages(text, number)
         print(f"[received_message] text='{text}' from={number}")
 
         return "EVENT_RECEIVED", 200
     except Exception as e:
         print(f"[received_message] error: {e}")
         return "EVENT_RECEIVED", 200
+
+def ProcessMessages(text,number):
+    text = text.lower()
+
+    if "hola" in text:
+        data = utils.TextFormatMessage("hola weon qlo, que pasa hijo de la perra", number)
+    elif "thank" in text:
+        data =  utils.TextFormatMessage("gracias conchetumare, no vimo", number)
+    else:
+         utils.TextFormatMessage("hola chileno qlo, no soy na venezolano", number)
+
+    whatsap_api_service.SendMessageWhatsaap(data)
 
 def generate_message(text, number):
     text_lower = (text or "").lower()
