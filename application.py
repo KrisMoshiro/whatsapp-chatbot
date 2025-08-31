@@ -71,15 +71,17 @@ def ProcessMessages(text,number):
         data =  utils.TextMessage("chao conchetumare, no vimo", number)
     
     elif "agencia" in text:
-        data = utils.TextMessage("esta es mi agencia")
+        data = utils.TextMessage("esta es mi agencia", number)
         dataLocation = utils.LocationMessage(number)
         listData.append(data)
         listData.append(dataLocation)
+
     elif "contact" in text:
         data = utils.TextMessage("*Contact Center:* /n 999999", number)
         listData.append(data)
+        
     else:
-        data =  utils.TextMessage("hola chileno qlo, no soy na venezolano", number)
+        data =  utils.TextMessage("habla chileno qlo, no soy na venezolano", number)
 
     for item in listData:
         whatsap_api_service.SendMessageWhatsaap(item)
