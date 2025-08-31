@@ -90,6 +90,7 @@ def ProcessMessages(text,number):
 
     else:
         data =  utils.TextMessage("habla chileno qlo, no soy na venezolano", number)
+        listData.append(data)
 
     for item in listData:
         whatsap_api_service.SendMessageWhatsaap(item)
