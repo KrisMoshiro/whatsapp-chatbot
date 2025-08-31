@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request
 import src.utils as utils
-import src.whatsaap_api_service as whatsap_api_service  # OJO: ideal renombrar a whatsapp_api_service.py
+import src.whatsappservice as whatsap_api_service  # OJO: ideal renombrar a whatsapp_api_service.py
 from src.secrets_gcp import _fetch_secret_raw  # usa tu utilitario
 
 # EB busca un objeto WSGI llamado "application"
