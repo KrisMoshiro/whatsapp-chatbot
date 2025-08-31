@@ -69,11 +69,20 @@ def ProcessMessages(text,number):
 
     elif "chao" in text:
         data =  utils.TextMessage("chao conchetumare, no vimo", number)
+    
+    elif "agencia" in text:
+        data = utils.TextMessage("esta es mi agencia")
+        dataLocation = utils.LocationMessage(number)
+        listData.append(data)
+        listData.append(dataLocation)
+    elif "contact" in text:
+        data = utils.TextMessage("*Contact Center:* /n 999999", number)
+        listData.append(data)
     else:
         data =  utils.TextMessage("hola chileno qlo, no soy na venezolano", number)
 
     for item in listData:
-        whatsap_api_service.SendMessageWhatsaap(data)
+        whatsap_api_service.SendMessageWhatsaap(item)
 
 def generate_message(text, number):
     text_lower = (text or "").lower()
