@@ -60,11 +60,11 @@ def ProcessMessages(text,number):
     text = text.lower()
 
     if "hola" in text:
-        data = utils.TextFormatMessage("hola weon qlo, que pasa hijo de la perra", number)
-    elif "thank" in text:
-        data =  utils.TextFormatMessage("gracias conchetumare, no vimo", number)
+        data = utils.TextMessage("hola weon qlo, que pasa hijo de la perra", number)
+    elif "chao" in text:
+        data =  utils.TextMessage("chao conchetumare, no vimo", number)
     else:
-         utils.TextFormatMessage("hola chileno qlo, no soy na venezolano", number)
+         utils.TextMessage("hola chileno qlo, no soy na venezolano", number)
 
     whatsap_api_service.SendMessageWhatsaap(data)
 
