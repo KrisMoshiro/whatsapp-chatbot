@@ -58,15 +58,22 @@ def received_message():
 
 def ProcessMessages(text,number):
     text = text.lower()
+    listData = []
 
-    if "hola" in text:
+    if "hola" in text or "option" in text:
         data = utils.TextMessage("hola weon qlo, que pasa hijo de la perra", number)
+        dataMenu = utils.ListMessage(number)
+
+        listData.append(data)
+        listData.append(dataMenu)
+
     elif "chao" in text:
         data =  utils.TextMessage("chao conchetumare, no vimo", number)
     else:
-         utils.TextMessage("hola chileno qlo, no soy na venezolano", number)
+        data =  utils.TextMessage("hola chileno qlo, no soy na venezolano", number)
 
-    whatsap_api_service.SendMessageWhatsaap(data)
+    for item in listData:
+        whatsap_api_service.SendMessageWhatsaap(data)
 
 def generate_message(text, number):
     text_lower = (text or "").lower()
